@@ -1,0 +1,122 @@
+---
+title: "Chapter 21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+install.packages("rJava")
+```
+
+```{r}
+library(xlsx)
+library(FinCal)
+setwd("~/Desktop/Acads/Excel Files/Chapter 21 Excel Files")
+df <- read.xlsx("Customerdata.xlsx",1)
+df
+chancestoquit <- df$Years
+df$Still.here. <- as.character(df$Still.here.)
+
+df$quits <- with(df, ifelse(df$Still.here.== "no",1,0))
+df
+ totalquits <- sum(df$quits)
+ totalchancestoquit <- sum(df$Years)
+ churn <- totalquits/totalchancestoquit
+ churn
+ retention <- 1-churn
+ retention
+ subscribers = 300000
+ nonsubscribers = 700000
+ newsubs = 35000
+ discountrate = .10
+ Multiplier=4.3
+ subprice = 55
+ wacc = 0.1
+ neweachyear = 20000
+ currentnew = 0.05
+ profit = 50
+ salvage = 215
+ 
+ df2 <- df[order(df$Years),c(-1,-3)]
+ df2 = df2[!duplicated(df2$Years),]
+ df2
+ nrow(df2)
+ 
+for (row in 1:nrow(df2)) { 
+    subscribers <- retention*subscribers+nonsubscribers*currentnew
+   nonsubscribers <- nonsubscribers - newsubs+neweachyear
+   newsubs = nonsubscribers * currentnew
+   prof = 50 * subscribers
+  df2$subs[row] <- subscribers
+  df2$nonsubs[row] <- nonsubscribers
+  df2$newsubs[row] <- newsubs
+  df2$profit[row] <- prof
+  
+  }
+ 
+ df2
+ npv <-  npv(r = wacc,cf = df2$profit)
+ npv
+```
+
+```{r}
+library(xlsx)
+setwd("~/Desktop/Acads/Excel Files/Chapter 21 Excel Files")
+df <- read.xlsx("OJdata.xlsx",1)
+df
+loyal = 0.80
+comployal = 0.72
+profitpergallon = 2.00
+us = 6000000
+them = 4000000
+
+ df2 <- df[order(df$Week), c(1,2,3,4)]
+ df2 = df2[!duplicated(df2$Week),]
+ for (row in 1:nrow(df2)) { 
+   us <- us*loyal+them*(1-comployal)
+   them <- them * comployal+ us*(1-loyal)
+   profit <- us * profitpergallon
+   df2$us[row] <- us
+   df2$them[row] <- them
+   df2$profit[row] <- profit
+ }
+ df2
+ totalprofit = sum(df2$profit)
+ totalprofit
+ 
+ newloyal = 0.84
+ comployalnew = 0.72
+ newprofitpergallon = 1.70
+ usnew = 6000000
+themnew = 4000000
+for (row in 1:nrow(df2)) { 
+   usnew <- usnew*newloyal+them*(1-comployalnew)
+   themnew <- themnew * comployalnew+ us*(1-newloyal)
+   profitnew <- usnew * newprofitpergallon
+   df2$usnew[row] <- usnew
+   df2$themnew[row] <- themnew
+   df2$profitnew[row] <- profitnew
+}
+totalprofitnew = sum(df2$profitnew)
+
+npv = totalprofitnew - totalprofit
+npv
+```
+
+```{r}
+library(xlsx)
+setwd("~/Desktop/Acads/Excel Files/Chapter 21 Excel Files")
+df <- read.xlsx("Forddata.xlsx",1)
+df <- df[order(df$Customer),c(1,2,3)]
+df
+
+fordafterford[1] = 0
+
+for(row in 1:nrow(df)) {
+  if (df$Customer[nrow(df)] != df$Customer[nrow(df)+1])
+  {
+     carbought = carbought + 1
+    else carbought = 1
+  }
+}
+```

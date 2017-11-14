@@ -1,0 +1,59 @@
+---
+title: "Chapter22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(xlsx)
+library(FinCal)
+setwd("~/Desktop/Acads/Excel Files/Chapter 22 Excel Files")
+df <- read.xlsx("Customerretentionoriginal.xls",1)
+ df
+ df <- df[c(-10,-11,-12,-13,-14)]
+ df
+ 
+df = na.omit(df)
+ profitpercustomer <- 400
+ 
+ nrow(df)
+for (row in 1:nrow(df)) { 
+   profit <- 0.5*400*(df$beginning.customers[row]+df$end.actual.customers[row])-df$X.s.per.prospect[row]*df$start.potential.customers[row]-df$X.s.per.customer[row]*df$beginning.customers[row]
+  marketingcost <- (df$X.s.per.prospect[row]*df$start.potential.customers[row]) +
+                      (df$X.s.per.customer[row]*df$beginning.customers[row])
+   df$profit[row] <- profit
+   df$marketingcost[row] <- marketingcost
+   
+}
+df
+npv <-  npv(r = 0.1,cf = df$profit)
+npv
+
+
+setwd("~/Desktop/Acads/Excel Files/Chapter 22 Excel Files")
+df2 <- read.xlsx("Customerretentionsalvage.xls",1)
+ df2
+ df2 <- df2[c(-10,-11,-12,-13,-14)]
+ df2
+ 
+df2 = na.omit(df2)
+ profitpercustomer <- 400
+ 
+ nrow(df2)
+for (row in 1:nrow(df2)) { 
+   profit <- 0.5*400*(df2$beginning.customers[row]+df2$end.actual.customers[row])-df2$X.s.per.prospect[row]*df2$start.potential.customers[row]-df2$X.s.per.customer[row]*df2$beginning.customers[row]
+  marketingcost <- (df2$X.s.per.prospect[row]*df2$start.potential.customers[row]) +
+                      (df2$X.s.per.customer[row]*df2$beginning.customers[row])
+   df2$profit[row] <- profit
+   df2$marketingcost[row] <- marketingcost
+   
+}
+df2
+npv2 <-  npv(r = 0.1,cf = df2$profit)
+npv2
+
+customervalue <- npv2-npv
+```

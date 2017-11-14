@@ -1,0 +1,63 @@
+---
+title: "Chapter23"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(knitr)
+library(RWeka)
+library(rpart)
+library(rpart.plot)
+library(xlsx)
+library(FinCal)
+setwd("~/Desktop/Acads/Excel Files/Chapter 23 Excel Files")
+df <- read.xlsx("cereal.xls",1)
+df
+str(df)
+summary(df)
+set.seed(123456789) ## to fix the random starting clusters
+grpcereal <- kmeans(df[,c("Cal","Protein")], centers=5, nstart=10)
+grpcereal
+
+o=order(grpcereal$cluster)
+df2 <- data.frame(df$Cereal[o],grpcereal$cluster[o])
+df2
+plot(df$Cal, df$Protein, type="n", xlim=c(40,150), xlab="Cal", ylab="Protein")
+text(x=df$Cal, y=df$Protein, labels=df$Cereal,col=grpcereal$cluster+1)
+
+set.seed(123456789)
+grpcereal2 <- kmeans(df[,-1], centers=5, nstart=10)
+o=order(grpcereal2$cluster)
+df3<-data.frame(df$Cereal[o],grpcereal2$cluster[o])
+df3
+library(cluster)
+clusplot(df[,-1], grpcereal2$cluster, main='2D representation of the Cluster solution', color=TRUE, shade=TRUE, labels=2, lines=0)
+
+cerealagg=agnes(df,diss=FALSE,metric="euclidian")
+plot(cerealagg, main='Dendrogram') ## dendrogram
+
+groups <- cutree(cerealagg, k=5) # cut tree into 5 clusters
+rect.hclust(cerealagg, k=5, border="red")
+```
+
+
+```{r}
+setwd("~/Desktop/Acads/Excel Files/Chapter 23 Excel Files")
+df <- read.xlsx("NewMBAdata.xlsx",1)
+df
+set.seed(123456789) ## to fix the random starting clusters
+grpcol <- kmeans(df[,c("X.average.undergrad.GPA","average.GMAT.score")], centers=5, nstart=10)
+grpcol
+
+o=order(grpcol$cluster)
+df2 <- data.frame(df$School[o],grpcol$cluster[o])
+df2
+plot(df$X.average.undergrad.GPA, df$average.GMAT.score, type="n", xlim=c(10,1000), xlab="Undergrad GPA", ylab="GMAT score")
+text(x=df$X.average.undergrad.GPA, y=df$average.GMAT.score, labels=df$School,col=grpcol$cluster+1)
+
+```
+
